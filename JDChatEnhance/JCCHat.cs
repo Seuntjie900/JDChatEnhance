@@ -79,6 +79,7 @@ namespace JDChatEnhance
             if (InvokeRequired)
             {
                 Invoke(new dNewTab(NewTab), tab);
+                return;
             }
             this.Tabs.TabPages.Add(tab);
         }
