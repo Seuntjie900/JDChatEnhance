@@ -134,6 +134,16 @@ namespace JDChatEnhance
             }
             this.Text = this.Text.Replace("*","");
         }
+        delegate void dFocustxt();
+        public void Focustxt()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new dFocustxt(Focustxt));
+            }
+            intext.Focus();
+        }
+
 
         void send_Click(object sender, EventArgs e)
         {

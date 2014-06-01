@@ -37,14 +37,10 @@ namespace JDChatEnhance
             Tabs.SelectedIndexChanged +=Tabs_SelectedIndexChanged;
             Tabs.MouseClick += Tabs_MouseClick;
             
-            Tabs.Selecting += Tabs_Selecting;
-        }
-
-        void Tabs_Selecting(object sender, TabControlCancelEventArgs e)
-        {
             
         }
 
+       
         void Tabs_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
@@ -60,6 +56,7 @@ namespace JDChatEnhance
         private void Tabs_SelectedIndexChanged(object sender, EventArgs e)
         {
             (Tabs.TabPages[Tabs.SelectedIndex] as ChatTab).UpdateName();
+            (Tabs.TabPages[Tabs.SelectedIndex] as ChatTab).Focustxt();
         }
 
         void Active_Tick(object sender, EventArgs e)
@@ -82,6 +79,29 @@ namespace JDChatEnhance
                 return;
             }
             this.Tabs.TabPages.Add(tab);
+        }
+        private delegate void dSwitchTab(ChatTab tab);
+        void SwitchTab(ChatTab tab)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new dSwitchTab(SwitchTab), tab);
+                return;
+            }
+            this.Tabs.SelectedTab = tab;
+        }
+        public void newpm(string name, string id)
+        {
+            try
+            {
+                ChatTab tmp = new ChatTab(instance, name, id, "pm", Tabs.TabPages[0].Size);
+                NewTab(tmp);
+                SwitchTab(tmp);
+            }
+            catch
+            {
+
+            }
         }
         void instance_OnChat(Chat chat)
         {
@@ -156,19 +176,27 @@ namespace JDChatEnhance
                         break;
                     }
                 }
-                if (!found && chat.UID == instance.uid)
+                if (!found)
                 {
-                    try
+                    if (chat.UID == instance.uid)
                     {
-                        ChatTab tmp = new ChatTab(instance, name, name,"room", Tabs.TabPages[0].Size);
-                        NewTab(tmp);
+                        try
+                        {
+                            ChatTab tmp = new ChatTab(instance, name, name, "room", Tabs.TabPages[0].Size);
+                            NewTab(tmp);
+                        }
+                        catch
+                        {
+
+                        }
+
+                        (Tabs.TabPages[Tabs.TabPages.Count - 1] as ChatTab).addmesage(chat);
                     }
-                    catch
+                    else
                     {
-
+                        chat.Message = "@" + name + " "+ chat.Message;
+                        (Tabs.TabPages[0] as ChatTab).addmesage(chat);
                     }
-
-                    (Tabs.TabPages[Tabs.TabPages.Count - 1] as ChatTab).addmesage(chat);
                 }
                 //addmesage(chat);
                 return true;
