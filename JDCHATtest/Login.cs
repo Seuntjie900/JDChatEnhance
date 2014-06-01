@@ -16,7 +16,21 @@ namespace Jdchattest
         public Login(JDChat parent)
         {
             InitializeComponent();
+            Button Blank = new Button();
+            Blank.Click += Blank_Click;
+            Blank.Text = "New Account";
+            Blank.Height = button1.Height;
+            Blank.Top = button1.Top;
+            Blank.Left = button1.Left - 100;
+            this.Controls.Add(Blank);
             this.parent = parent;
+            this.BringToFront();
+            parent.WindowState = FormWindowState.Minimized;
+        }
+
+        void Blank_Click(object sender, EventArgs e)
+        {
+            parent.Login(radioButton2.Checked);
         }
 
         private void button1_Click(object sender, EventArgs e)

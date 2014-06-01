@@ -25,24 +25,86 @@ namespace Jdchattest
             ch.Dock = DockStyle.Fill;
             loginpage  = new Login(this);
             loginpage.Show();
+            this.Visible = false;
+        }
+
+        public void Login(bool Doge)
+        {
+            loginpage.Close();
+            this.WindowState = FormWindowState.Normal;
+            this.Text = "Logging in";
+            foreach (Control c in this.Controls)
+            {
+                c.Enabled = false;
+            }
+            Instance.Connect(Doge);
+            if (Instance.uid != "" && Instance.uid != null)
+            {
+                this.Text = "Just-Dice Chat";
+                foreach (Control c in this.Controls)
+                {
+                    c.Enabled = true;
+                }
+            }
+            else
+            {
+                loginpage = new Login(this);
+                loginpage.Show();
+                this.WindowState = FormWindowState.Minimized;
+            }
+
         }
 
         public void Login(string Secret, bool Doge)
         {
-            Instance.Connect(Doge, Secret);
-            if (Instance.uid!="" && Instance.uid!= null)
+            loginpage.Close();
+            this.WindowState = FormWindowState.Normal;
+            this.Text = "Logging in";
+            foreach (Control c in this.Controls)
             {
-                loginpage.Close();
+                c.Enabled = false;
+            }
+            Instance.Connect(Doge, Secret);
+            if (Instance.uid != "" && Instance.uid != null)
+            {
+                this.Text = "Just-Dice Chat";
+                foreach (Control c in this.Controls)
+                {                    
+                    c.Enabled = true;
+                }
+            }
+            else
+            {
+                loginpage = new Login(this);
+                loginpage.Show();
+                this.WindowState = FormWindowState.Minimized;
             }
 
         }
 
         public void Login(string User, string Pw, string GA, bool Doge)
         {
+            loginpage.Close();
+            this.WindowState = FormWindowState.Normal;
+            this.Text = "Logging in";
+            foreach (Control c in this.Controls)
+            {
+                c.Enabled = false;
+            }
             Instance.Connect(Doge, User, Pw, GA);
             if (Instance.uid != "" && Instance.uid != null)
             {
-                loginpage.Close();
+                this.Text = "Just-Dice Chat";
+                foreach (Control c in this.Controls)
+                {
+                    c.Enabled = true;
+                }
+            }
+            else
+            {
+                loginpage = new Login(this);
+                loginpage.Show();
+                this.WindowState = FormWindowState.Minimized;
             }
 
         }
@@ -64,14 +126,7 @@ namespace Jdchattest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*JDCAPI.Chat cht = new JDCAPI.Chat();
-            cht.UID = "1";
-            cht.User = "dooglus";
-            cht.Message = "hello there hello there hello there hello there hello there hello there hello there hello there hello there";
-            cht.Date = DateTime.Now;
-            ch.testmsg(cht);*/
-            Instance.Connect(false,"bfa415298a3ae20573ae89e08af099385518e667fb233fe750516e38cfeac41a");
-            button1.Visible = false;
+            
         }
 
         protected override void OnClosing(CancelEventArgs e)
